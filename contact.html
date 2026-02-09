@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Satya Sri | Contact</title>
+    <!-- Fonts: Orbitron (Headings) & Rajdhani (Body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- Cyber-Tech Dark Palette --- */
+        :root {
+            --bg-black: #000000;
+            --primary: plum; /* Plum Neon */
+            --secondary: #bc13fe; /* Purple Neon */
+            --text-white: #ffffff;
+            --text-gray: #a0a0a0;
+            --glass: rgba(20, 20, 20, 0.7);
+        }
+
+        /* --- Reset --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Rajdhani', sans-serif; 
+            background-color: var(--bg-black); 
+            color: var(--text-white); 
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- BACKGROUND ANIMATION LAYERS --- */
+        
+        /* 1. The Moving Grid (CSS) */
+        .grid-bg {
+            content: ""; position: fixed; top: 0; left: 0; width: 200%; height: 200%;
+            background-image: 
+                linear-gradient(rgba(221, 160, 221, 0.05) 1px, transparent 1px), /* Plum tint */
+                linear-gradient(90deg, rgba(221, 160, 221, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+            animation: moveGrid 20s linear infinite;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        @keyframes moveGrid { 
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); } 
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px) translateZ(-200px); } 
+        }
+
+        /* 2. The Network Particles (Canvas) */
+        #network-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+        }
+
+        /* 3. Vignette Overlay */
+        .vignette {
+            position: fixed; inset: 0; 
+            background: radial-gradient(circle at center, transparent 0%, var(--bg-black) 85%); 
+            z-index: 0; pointer-events: none;
+        }
+
+        /* --- Header --- */
+       header {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(221, 160, 221, 0.2);
+            padding: 1rem 0;
+        }
+        nav { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; }
+        
+        .logo { 
+            font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 1.5rem; 
+            color: var(--text-white); text-transform: uppercase; letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--primary);
+            text-decoration: none;
+        }
+        
+        nav ul { display: flex; gap: 2rem; list-style: none; }
+        nav a { 
+            font-size: 1rem; font-weight: 500; color: var(--text-gray); transition: 0.3s; 
+            text-transform: uppercase; letter-spacing: 1px; text-decoration: none; position: relative;
+        }
+        nav a:hover, nav a.active { color: var(--primary); text-shadow: 0 0 8px var(--primary); }
+        nav a::before {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px;
+            background: var(--primary); box-shadow: 0 0 10px var(--primary);
+            transition: 0.3s;
+        }
+        nav a:hover::before, nav a.active::before { width: 100%; }
+
+        /* --- Main Layout --- */
+        main { position: relative; z-index: 1; padding-top: 120px; padding-bottom: 4rem; }
+        .contact-section { text-align: center; }
+
+        .contact-content h1 {
+            font-family: 'Orbitron', sans-serif; font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: white;
+            text-shadow: 0 0 10px var(--secondary);
+        }
+        .contact-content p {
+            font-size: 1.2rem; color: var(--text-gray); margin-bottom: 3rem;
+        }
+
+        /* --- Contact Cards Grid --- */
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* --- Individual Card Styling --- */
+        .contact-card {
+            background: var(--glass); backdrop-filter: blur(15px);
+            padding: 3rem 2rem; border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.6s ease-in-out; /* Smooth spin speed */
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Neon Corner Accents */
+        .contact-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 20px; height: 20px;
+            border-top: 3px solid var(--primary); border-left: 3px solid var(--primary);
+        }
+        .contact-card::after {
+            content: ''; position: absolute; bottom: 0; right: 0; width: 20px; height: 20px;
+            border-bottom: 3px solid var(--primary); border-right: 3px solid var(--primary);
+        }
+
+        /* --- UPDATED: Hover Spin Effect --- */
+        .contact-card:hover {
+            transform: rotate(360deg) scale(1.05); /* Full 360 Spin + Slight Zoom */
+            border-color: var(--secondary);
+            box-shadow: 0 20px 40px rgba(188, 19, 254, 0.5); /* Strong glow on spin */
+        }
+
+        .contact-card i {
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            transition: 0.4s;
+            text-shadow: 0 0 10px rgba(221, 160, 221, 0.5);
+        }
+
+        /* Stop icon rotation or make it pop when card spins */
+        .contact-card:hover i {
+            color: var(--secondary);
+            text-shadow: 0 0 20px var(--secondary);
+            transform: scale(1.2); 
+        }
+
+        .contact-card h3 {
+            font-family: 'Orbitron', sans-serif; font-size: 1.4rem;
+            margin-bottom: 0.5rem; color: var(--text-white);
+        }
+        .contact-card p {
+            font-size: 1rem; color: var(--text-gray);
+        }
+
+        /* --- Footer Text --- */
+        .footer-text {
+            margin-top: 4rem; color: var(--text-gray); font-size: 0.9rem;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .contact-content h1 { font-size: 2.5rem; }
+            nav { flex-direction: column; gap: 1rem; }
+            .contact-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+     <div class="grid-bg"></div>
+    
+    <!-- 2. Canvas Network Background (Animation) -->
+    <canvas id="network-canvas"></canvas>
+    
+    <!-- 3. Vignette -->
+    <div class="vignette"></div>
+
+    <header>
+        <nav>
+            <!-- Logo links to Home -->
+            <a href="index.html" class="logo">MY PORTFOLIO</a>
+
+   
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="skills.html">Skills</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="contact-section">
+            <div class="contact-content">
+                <h1>Get in <span style="color:var(--primary)">Touch</span></h1>
+                <p>Connect with me through these digital channels:</p>
+
+                <div class="contact-cards">
+
+                    <div class="contact-card">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email</h3>
+                        <p>satyasri@email.com</p>
+                    </div>
+
+                    <div class="contact-card">
+                        <i class="fas fa-phone"></i>
+                        <h3>Phone</h3>
+                        <p>+91 888834388</p>
+                    </div>
+
+                    <div class="contact-card">
+                        <i class="fab fa-linkedin"></i>
+                        <h3>LinkedIn</h3>
+                        <p>linkedin.com/in/satyasri</p>
+                    </div>
+
+                    <div class="contact-card">
+                        <i class="fab fa-github"></i>
+                        <h3>GitHub</h3>
+                        <p>github.com/satyasri</p>
+                    </div>
+
+                </div>
+
+                <div class="footer-text">
+                    <p>&copy; 2025 Satya Sri. All rights reserved.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Background Animation Script -->
+    <script>
+        const canvas = document.getElementById('network-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let particles = [];
+        
+        // Configuration
+        const particleCount = 60; 
+        const connectionDistance = 150; 
+        const mouseDistance = 200; 
+
+        // Resize handling
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Mouse tracking
+        let mouse = { x: null, y: null };
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        // Particle Class
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5; 
+                this.vy = (Math.random() - 0.5) * 0.5; 
+                this.size = Math.random() * 2 + 1;
+                // Random color between Plum and Purple
+                this.color = Math.random() > 0.5 ? '#dda0dd' : '#bc13fe'; 
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Bounce off edges
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                // Mouse Interaction
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+                
+                if (distance < mouseDistance && mouse.x !== null) {
+                    const forceDirectionX = dx / distance;
+                    const forceDirectionY = dy / distance;
+                    const force = (mouseDistance - distance) / mouseDistance;
+                    const directionX = forceDirectionX * force * 0.5; 
+                    const directionY = forceDirectionY * force * 0.5;
+                    
+                    this.x -= directionX;
+                    this.y -= directionY;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        // Init Particles
+        function init() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        // Animation Loop
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                // Draw connections
+                for (let j = i; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        // Opacity based on distance
+                        let opacity = 1 - (distance / connectionDistance);
+                        ctx.strokeStyle = `rgba(221, 160, 221, ${opacity * 0.2})`; // Plum connections
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+    </script>
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Satya Sri | Portfolio</title>
+    <!-- Fonts: Orbitron (Headings) & Rajdhani (Body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- Cyber-Tech Dark Palette --- */
+        :root {
+            --bg-black: #000000;
+            --primary: plum; /* Plumz Neon */
+            --secondary: #bc13fe; /* Purple Neon */
+            --text-white: #ffffff;
+            --text-gray: #a0a0a0;
+            --glass: rgba(20, 20, 20, 0.6);
+        }
+
+        /* --- Reset --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Rajdhani', sans-serif; 
+            background-color: var(--bg-black); 
+            color: var(--text-white); 
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- BACKGROUND ANIMATION LAYERS --- */
+        
+        /* 1. The Moving Grid (CSS) */
+        .grid-bg {
+            content: ""; position: fixed; top: 0; left: 0; width: 200%; height: 200%;
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+            animation: moveGrid 20s linear infinite;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        @keyframes moveGrid { 
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); } 
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px) translateZ(-200px); } 
+        }
+
+        /* 2. The Network Particles (Canvas) */
+        #network-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; /* Above grid, below content */
+        }
+
+        /* 3. Vignette Overlay */
+        .vignette {
+            position: fixed; inset: 0; 
+            background: radial-gradient(circle at center, transparent 0%, var(--bg-black) 85%); 
+            z-index: 0; pointer-events: none;
+        }
+
+        /* --- Header --- */
+        header {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+            padding: 1rem 0;
+        }
+        nav { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; }
+        
+        .photo { 
+            font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 1.5rem; 
+            color: var(--text-white); text-transform: uppercase; letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--primary);
+        }
+        
+        nav ul { display: flex; gap: 2rem; list-style: none; }
+        nav a { 
+            font-size: 1rem; font-weight: 500; color: var(--text-gray); transition: 0.3s; 
+            text-transform: uppercase; letter-spacing: 1px; text-decoration: none; position: relative;
+        }
+        nav a:hover, nav a.active { color: var(--primary); text-shadow: 0 0 8px var(--primary); }
+        nav a::before {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px;
+            background: var(--primary); box-shadow: 0 0 10px var(--primary);
+            transition: 0.3s;
+        }
+        nav a:hover::before, nav a.active::before { width: 100%; }
+
+        /* --- Main Layout --- */
+        main { position: relative; z-index: 1; padding-top: 120px; }
+        .main-container {
+            max-width: 1200px; margin: 0 auto; padding: 4rem 2rem;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; min-height: 85vh; gap: 2rem;
+        }
+
+        .content { flex: 1; min-width: 320px; }
+
+        /* --- Text Animations --- */
+        .content h1 { 
+            font-family: 'Orbitron', sans-serif; font-size: 4rem; 
+            margin-bottom: 1.5rem; line-height: 1.1;
+            background: linear-gradient(90deg, var(--primary), #ffffff, var(--secondary));
+            background-size: 200% auto; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite;
+        }
+
+        @keyframes shine { to { background-position: 200% center; } }
+
+        .content p { 
+            font-size: 1.2rem; color: var(--text-gray); margin-bottom: 0.8rem; 
+            max-width: 550px; border-left: 3px solid var(--secondary); padding-left: 1.5rem;
+            opacity: 0; animation: textSlideIn 0.8s ease forwards;
+        }
+        .content p:nth-child(2) { animation-delay: 0.2s; }
+        .content p:nth-child(3) { animation-delay: 0.4s; }
+        .content p:nth-child(4) { animation-delay: 0.6s; }
+
+        @keyframes textSlideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+
+        /* Buttons */
+        .cta-buttons { margin-top: 3rem; display: flex; gap: 1.5rem; }
+        .btn {
+            padding: 1rem 2.5rem; border-radius: 4px; font-weight: 700; transition: 0.3s; cursor: pointer;
+            position: relative; overflow: hidden; font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase; letter-spacing: 1px; clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            text-decoration: none; display: inline-block;
+        }
+        
+        .btn:first-child { background: transparent; color: var(--primary); border: 2px solid var(--primary); box-shadow: inset 0 0 10px rgba(0,243,255,0.2); }
+        .btn:first-child:hover { background: var(--primary); color: black; box-shadow: 0 0 20px var(--primary); }
+        
+        .btn:last-child { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+        .btn:last-child:hover { background: var(--secondary); border-color: var(--secondary); box-shadow: 0 0 20px var(--secondary); }
+
+        /* --- NEW: CIRCULAR CYBER IMAGE --- */
+        .image { flex: 1; min-width: 320px; display: flex; justify-content: center; align-items: center; }
+
+        .profile-orbit {
+            position: relative;
+            width: 350px; height: 350px;
+            display: flex; justify-content: center; align-items: center;
+            animation: floatBox 6s ease-in-out infinite;
+        }
+
+        /* The Rings */
+        .orbit-ring {
+            position: absolute; width: 100%; height: 100%; border-radius: 50%;
+            border: 2px solid transparent; box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+        
+        /* Ring 1: Cyan, Dashed, Clockwise */
+        .ring-1 {
+            border-top: 2px solid var(--primary);
+            border-bottom: 2px solid var(--primary);
+            border-left: 2px dashed rgba(0, 243, 255, 0.3);
+            border-right: 2px dashed rgba(0, 243, 255, 0.3);
+            animation: spin 10s linear infinite;
+        }
+
+        /* Ring 2: Purple, Solid, Counter-Clockwise */
+        .ring-2 {
+            width: 85%; height: 85%;
+            border: 1px solid rgba(188, 19, 254, 0.5);
+            border-top: 3px solid var(--secondary);
+            border-bottom: 3px solid var(--secondary);
+            animation: spinReverse 15s linear infinite;
+        }
+
+        /* The Actual Image */
+        .profile-img {
+            width: 260px; height: 260px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: relative; z-index: 5;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: 0.5s;
+        }
+
+        .profile-orbit:hover .profile-img {
+            box-shadow: 0 0 50px var(--primary);
+            transform: scale(1.05);
+        }
+
+        @keyframes floatBox { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes spinReverse { 100% { transform: rotate(-360deg); } }
+
+        /* --- Highlights Cards --- */
+        .highlights { max-width: 1200px; margin: 6rem auto; padding: 2rem; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+        
+        .highlight-card {
+            background: var(--glass); backdrop-filter: blur(10px);
+            padding: 2.5rem 2rem; border-radius: 15px;
+            width: 300px; text-align: center; border: 1px solid rgba(255,255,255,0.1);
+            /* Faster transition for the spin */
+            transition: 0.6s ease-in-out; 
+            cursor: pointer;
+            position: relative; overflow: hidden;
+            opacity: 0; animation: cardPop 0.6s ease forwards;
+        }
+
+        /* Corner accents */
+        .highlight-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 20px; height: 20px;
+            border-top: 2px solid var(--primary); border-left: 2px solid var(--primary);
+        }
+        .highlight-card::after {
+            content: ''; position: absolute; bottom: 0; right: 0; width: 20px; height: 20px;
+            border-bottom: 2px solid var(--primary); border-right: 2px solid var(--primary);
+        }
+
+        .highlight-card:nth-child(1) { animation-delay: 0.5s; }
+        .highlight-card:nth-child(2) { animation-delay: 0.7s; }
+        .highlight-card:nth-child(3) { animation-delay: 0.9s; }
+
+        /* --- UPDATED: 360 Spin Effect from Contact Page --- */
+        .highlight-card:hover {
+            /* Replaced tilt with full 360 spin + zoom */
+            transform: rotate(360deg) scale(1.05); 
+            border-color: var(--secondary);
+            box-shadow: 0 20px 40px rgba(188, 19, 254, 0.5); /* Strong glow */
+        }
+
+        .highlight-card i {
+            font-size: 3rem; 
+            color: var(--text-white); 
+            margin-bottom: 1.5rem; 
+            display: block; 
+            text-shadow: 0 0 10px var(--secondary); 
+            transition: 0.4s; 
+        }
+        
+        /* Icon scales up while card spins to keep it visually stable */
+        .highlight-card:hover i { 
+            transform: scale(1.2); 
+            color: var(--secondary); 
+            text-shadow: 0 0 20px var(--secondary); 
+        }
+
+        .highlight-card h3 { margin-bottom: 1rem; color: var(--text-white); font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+        .highlight-card p { font-size: 1rem; color: var(--text-gray); }
+
+        @keyframes cardPop { from { opacity: 0; transform: translateY(50px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        /* --- Footer --- */
+        footer { background: #050505; padding: 4rem 1rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 6rem; position: relative; z-index: 1;}
+        .social-links { margin-bottom: 2rem; display: flex; justify-content: center; gap: 1.5rem; }
+        .social-links a { 
+            width: 50px; height: 50px; background: rgba(255,255,255,0.05); border: 1px solid var(--primary); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; transition: 0.4s; color: var(--text-white); text-decoration: none;
+        }
+        .social-links a:hover { background: var(--primary); color: black; transform: rotate(360deg) scale(1.1); box-shadow: 0 0 15px var(--primary); }
+        footer p { color: var(--text-gray); font-family: 'Orbitron', sans-serif; letter-spacing: 2px; font-size: 0.8rem; }
+
+        /* --- Responsive --- */
+        @media (max-width: 900px) {
+            .main-container { flex-direction: column-reverse; text-align: center; padding-top: 2rem; }
+            .content { margin-top: 3rem; }
+            .content p { border-left: none; border-bottom: 3px solid var(--secondary); padding-bottom: 0.5rem; padding-left: 0; display: inline-block; }
+            .cta-buttons { justify-content: center; }
+            nav { flex-direction: column; gap: 1rem; }
+            .content h1 { font-size: 2.5rem; }
+            .profile-orbit { width: 280px; height: 280px; }
+            .profile-img { width: 200px; height: 200px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. CSS Grid Background -->
+    <div class="grid-bg"></div>
+    
+    <!-- 2. Canvas Network Background (Animation) -->
+    <canvas id="network-canvas"></canvas>
+    
+    <!-- 3. Vignette -->
+    <div class="vignette"></div>
+
+    <header>
+        <nav>
+            <div class="photo">MY PORTFOLIO</div>
+            <ul>
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="skills.html">Skills</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="main-container">
+            <div class="content">
+                <h1>Hi, I'm <span>Satya Sri</span></h1>
+                <p>"Aspiring tech professional with a BSc in Computer Science, eager to build impactful solutions."</p>
+                <p>"Detail-oriented graduate with skills in coding, data analysis, and problem-solving."</p>
+                <p>"Passionate about leveraging tech skills to drive innovation and growth."</p>
+                <div class="cta-buttons">
+                    <a href="projects.html" class="btn">View My Work</a>
+                    <!-- Note: Keep your local path here, but it won't work if you move the file -->
+                    <a href="C:\Users\Admin\OneDrive\Desktop\Resume\P.Satya Sri Sai Veni Resume.pdf" class="btn">Resume</a>
+                </div>
+            </div>
+            <div class="image">
+                <!-- Circular Orbit Animation -->
+                <div class="profile-orbit">
+                    <div class="orbit-ring ring-1"></div>
+                    <div class="orbit-ring ring-2"></div>
+                    <!-- Replace src with your local image path if needed -->
+                    <img src="C:\Users\Admin\OneDrive\Desktop\Full Stack\Portfolio\satya1.jpg" class="profile-img" alt="Satya Sri">
+                </div>
+            </div>
+        </section>
+        <section class="highlights">
+            <div class="highlight-card">
+                <i class="fas fa-code"></i>
+                <h3>Clean Code</h3>
+                <p>Writing maintainable, efficient code with best practices</p>
+            </div>
+            <div class="highlight-card">
+                <i class="fas fa-mobile"></i>
+                <h3>Responsive Design</h3>
+                <p>Creating seamless experiences across all devices</p>
+            </div>
+            <div class="highlight-card">
+                <i class="fas fa-paint-brush"></i>
+                <h3>Modern UI</h3>
+                <p>Designing intuitive and beautiful user Interface</p>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+            <p>&copy; 2025 Satya Sri. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Background Animation Script -->
+    <script>
+        const canvas = document.getElementById('network-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let particles = [];
+        
+        // Configuration
+        const particleCount = 60; // Number of nodes
+        const connectionDistance = 150; // Distance to draw lines
+        const mouseDistance = 200; // Mouse interaction radius
+
+        // Resize handling
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Mouse tracking
+        let mouse = { x: null, y: null };
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        // Particle Class
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5; // Velocity X
+                this.vy = (Math.random() - 0.5) * 0.5; // Velocity Y
+                this.size = Math.random() * 2 + 1;
+                // Random color between Cyan and Purple
+                this.color = Math.random() > 0.5 ? '#00f3ff' : '#bc13fe'; 
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Bounce off edges
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                // Mouse Interaction
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+                
+                if (distance < mouseDistance && mouse.x !== null) {
+                    const forceDirectionX = dx / distance;
+                    const forceDirectionY = dy / distance;
+                    const force = (mouseDistance - distance) / mouseDistance;
+                    const directionX = forceDirectionX * force * 0.5; // Push strength
+                    const directionY = forceDirectionY * force * 0.5;
+                    
+                    this.x -= directionX;
+                    this.y -= directionY;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        // Init Particles
+        function init() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        // Animation Loop
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                // Draw connections
+                for (let j = i; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        // Opacity based on distance
+                        let opacity = 1 - (distance / connectionDistance);
+                        ctx.strokeStyle = `rgba(0, 243, 255, ${opacity * 0.2})`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+    </script>
+</body>
+</html>
